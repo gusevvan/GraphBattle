@@ -56,8 +56,6 @@ int main()
 
     std::cout << std::setprecision(12) << "Результат вычисления: " << calculate(str) << std::endl;
 
-    std::cin.get();
-    std::cin.get();
     return 0;
 }
 
