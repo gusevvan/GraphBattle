@@ -37,34 +37,36 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
-                if (textBox.Contains(mousePos.x, mousePos.y))
+            if (!isFormula) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (event.type == sf::Event::MouseButtonPressed)
                 {
-                    fc.setFocusObject(&textBox);
-                }
-                else
-                {
-                    fc.setFocusObject(0);
-                }
-            }
-            tb::FocusObject* fo = fc.getFocusObject();
-            if (fo != 0)
-            {
-                fo->event(event);
-            }
-            if (fc.getFocusObject()) {
-                if (event.type == sf::Event::KeyPressed) {
-                    auto a = textBox.getStr();
-                    std::string text;
-                    for (int i = 0; i < textBox.getSize(); ++i) {
-                        text += *(a + i);
+                    if (textBox.Contains(mousePos.x, mousePos.y))
+                    {
+                        fc.setFocusObject(&textBox);
                     }
-                    if (event.key.code == sf::Keyboard::Enter) {
+                    else
+                    {
                         fc.setFocusObject(0);
-                        formula.setStr(text);
-                        isFormula = true;
+                    }
+                }
+                tb::FocusObject* fo = fc.getFocusObject();
+                if (fo != 0)
+                {
+                    fo->event(event);
+                }
+                if (fc.getFocusObject()) {
+                    if (event.type == sf::Event::KeyPressed) {
+                        auto a = textBox.getStr();
+                        std::string text;
+                        for (int i = 0; i < textBox.getSize(); ++i) {
+                            text += *(a + i);
+                        }
+                        if (event.key.code == sf::Keyboard::Enter) {
+                            fc.setFocusObject(0);
+                            formula.setStr(text);
+                            isFormula = true;
+                        }
                     }
                 }
             }

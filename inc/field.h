@@ -63,7 +63,7 @@ namespace gm {
 
         bool checkCrash() {
             bool isCrashed = false;
-            if (_buffer.back().x > 800 || _buffer.back().y > 600) {
+            if (_buffer.back().x > 800 || _buffer.back().y > 600 || _buffer.back().y < 0 || _buffer.back().x < 0) {
                 _grX = 0;
                 _grY = 0;
                 _buffer.clear();
