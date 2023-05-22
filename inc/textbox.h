@@ -9,7 +9,7 @@ namespace tb
     public:
         virtual void setFocus() = 0;
         virtual void deleteFocus() = 0;
-        virtual void event(const sf::Event&) = 0;
+        virtual void event(const sf::Event&, const int& x=0, const int& y=0) = 0;
     };
 
 
@@ -33,10 +33,10 @@ namespace tb
         int v_carriage;
     public:
         TextBox();
-        virtual void draw(sf::RenderTarget& render, sf::RenderStates states) const;
+        void draw(sf::RenderTarget& render, sf::RenderStates states) const;
         void setFocus() override;
         void deleteFocus() override;
-        virtual void event(const sf::Event& event);
+        void event(const sf::Event& event, const int& x = 0, const int& y = 0);
         bool Contains(const int& x, const int& y);
         auto getStr();
         int getSize();

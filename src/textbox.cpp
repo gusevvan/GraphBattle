@@ -10,7 +10,7 @@ TextBox::TextBox()
     l_bound = 0;
     r_bound = 24;
 
-    m_text.setPosition(100, 500);
+    m_text.setPosition(100, 700);
     m_text.setString(m_newText.substring(l_bound, 25));
     m_text.setFont(font);
 
@@ -19,8 +19,8 @@ TextBox::TextBox()
 
     m_box.setFillColor(sf::Color::Blue);
     m_box.setSize(sf::Vector2f(370, 40));
-    m_box.setPosition(100, 500);
-
+    m_box.setPosition(100, 700);
+    m_box.setOutlineColor(sf::Color::Cyan);
 }
 void TextBox::draw(sf::RenderTarget& render, sf::RenderStates states) const
 {
@@ -36,7 +36,11 @@ void TextBox::deleteFocus()
 {
     m_box.setFillColor(sf::Color::Blue);
 }
-void TextBox::event(const sf::Event& event)
+bool TextBox::Contains(const int& x, const int& y)
+{
+    return m_box.getGlobalBounds().contains(x, y);
+}
+void TextBox::event(const sf::Event& event, const int& x, const int& y)
 {
     if (event.type == sf::Event::TextEntered)
     {
@@ -165,12 +169,20 @@ void TextBox::event(const sf::Event& event)
             break;
         }
     }
+    else if (event.type == sf::Event::MouseMoved)
+    {
+        if (Contains(x, y))
+        {
+            this->m_box.setOutlineThickness(2);
+        }
+        else
+        {
+            this->m_box.setOutlineThickness(0);
+        }
+    }
 }
 
-bool TextBox::Contains(const int& x, const int& y)
-{
-    return m_box.getGlobalBounds().contains(x, y);
-}
+
 auto TextBox::getStr()
 {
     return m_newText.getData();
@@ -226,7 +238,7 @@ void TextBox::updateText()
 }
 void TextBox::updateVCarriage()
 {
-    carriage_box.setPosition((m_text.findCharacterPos(v_carriage)).x + 1, 505);
+    carriage_box.setPosition((m_text.findCharacterPos(v_carriage)).x + 1, 705);
 }
 
 FocusController::FocusController(FocusObject* obj) : m_object(obj)
