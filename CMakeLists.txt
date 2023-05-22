@@ -18,7 +18,8 @@ include_directories("inc/")
 link_directories("ext/SFML/lib/")	
 
 add_executable("${PROJECT_NAME}" main.cpp 
-								 src/FormRec.cpp
+								inc/FormRec.h
+								src/FormRec.cpp
 								inc/textbox.h)
 
 file(COPY "my_font.ttf" DESTINATION ".")
