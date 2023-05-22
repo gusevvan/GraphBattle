@@ -63,6 +63,12 @@ namespace gm {
 
         bool checkCrash() {
             bool isCrashed = false;
+            if (_buffer.back().x > 800 || _buffer.back().y > 600) {
+                _grX = 0;
+                _grY = 0;
+                _buffer.clear();
+                return true;
+            }
             for (sf::CircleShape shape : _blacks) {
 
                 if ((shape.getPosition().x - _buffer.back().x) * (shape.getPosition().x - _buffer.back().x) +

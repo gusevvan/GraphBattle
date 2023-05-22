@@ -2,7 +2,7 @@
 using namespace tb;
 TextBox::TextBox()
 {
-    m_newText = "";
+    m_newText = "x";
     font.loadFromFile("my_font.ttf");
 
     v_carriage = 0;
@@ -183,7 +183,7 @@ void TextBox::event(const sf::Event& event, const int& x, const int& y)
 }
 
 
-auto TextBox::getStr()
+const sf::Uint32* TextBox::getStr()
 {
     return m_newText.getData();
 }

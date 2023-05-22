@@ -24,7 +24,7 @@ int main()
 
     window.setFramerateLimit(60);
 
-   
+    bool isFormula = false;
 
     while (window.isOpen())
     {
@@ -56,27 +56,27 @@ int main()
             }
             if (fc.getFocusObject()) {
                 if (event.type == sf::Event::KeyPressed) {
+                    auto a = textBox.getStr();
+                    std::string text;
+                    for (int i = 0; i < textBox.getSize(); ++i) {
+                        text += *(a + i);
+                    }
                     if (event.key.code == sf::Keyboard::Enter) {
                         fc.setFocusObject(0);
+                        formula.setStr(text);
+                        isFormula = true;
                     }
                 }
             }
         }
 
-        auto a = textBox.getStr();
-        std::string text;
-        for (int i = 0; i < textBox.getSize(); ++i) {
-            text += *(a + i);
+        if (isFormula) {
+            for (int i = 0; i < 8; ++i) {
+                field.setGrY(20 * formula.calculate(field.getGrX()));
+                field.updateGraph();
+            }
+            isFormula = !field.checkCrash();
         }
-
-        for (int i = 0; i < 8; ++i) {
-            formula.setStr(text, field.getGrX());
-            field.setGrY(20 * formula.calculate());
-            field.updateGraph();
-        }
-
-
-        field.checkCrash();
 
 
         window.display();

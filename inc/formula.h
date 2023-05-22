@@ -9,22 +9,22 @@ namespace gm {
 		std::map< std::string, double > vars;
 	public:
 
-		void setStr(std::string& str, double grX);
+		void setStr(std::string& str);
 
-		double number(unsigned& index);
+		double number(std::string& str, unsigned& index);
 
-		double identifier(unsigned& index);
+		double identifier(std::string& str, unsigned& index);
 
-		double function(std::string& name, unsigned& index);
+		double function(std::string& name, std::string& str, unsigned& index);
 
-		double base(unsigned& index);
+		double base(std::string& str, unsigned& index);
 
-		double expr(unsigned& index);
+		double expr(std::string& str, unsigned& index);
 
-		double term(unsigned& index);
+		double term(std::string& str, unsigned& index);
 
-		double factor(unsigned& index);
+		double factor(std::string& str, unsigned& index);
 
-		double calculate();
+		double calculate(double grX);
 	};
 }
