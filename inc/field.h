@@ -36,9 +36,11 @@ namespace gm {
             _Oy.setPosition(0, 300);
             _Ox.setSize(sf::Vector2f(3.f, 600.f));
             _Ox.setPosition(400, 0);
-            _Oy.setFillColor(sf::Color::Yellow);
-            _Ox.setFillColor(sf::Color::Yellow);
-            _buffer.emplace_back(_grX = 0, _grY = 0);
+            _Oy.setFillColor(sf::Color(255, 102, 0));
+            _Ox.setFillColor(sf::Color(255, 102, 0));
+            _buffer.emplace_back(400, 300);
+            _grX = 0;
+            _grY = 0;
 
             int rounds = rand() % 10 + 3;
 

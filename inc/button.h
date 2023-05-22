@@ -15,6 +15,6 @@ namespace bt
         Button();
         void draw(sf::RenderTarget& render, sf::RenderStates states) const;
         bool Contains(const int& x, const int& y);
-        void event(const sf::Event& event, const int& x = 0, const int& y = 0);
+        void setOutLine(const int& flag);
     };
 }
