@@ -2,11 +2,13 @@
 #include <iomanip>
 #include <map>
 #include <string>
+#include <sstream>
 #include <cmath>
 #include <cstring>
-#include <FormRec.h>
+#include <formula.h>
+#include <field.h>
 
-namespace fr {
+namespace gm {
 
     /*
 
@@ -32,17 +34,31 @@ namespace fr {
 
     */
 
-    std::map< std::string, double > vars;
+    void Formula::setStr(std::string& str, double grX) {
+        std::ostringstream strs;
+        strs << grX / 20;
+        std::string value = strs.str();
+        std::string term;
+        for (int i = 0; i < str.size(); ++i) {
+            if (str[i] == 'x') {
+                term += value;
+            }
+            else {
+                term += str[i];
+            }
+        }
+        _str = term;
+    }
 
-    double number(std::string& str, unsigned& index)
+    double Formula::number(unsigned& index)
     {
         double result = 0.0;
         char digit;
         double k = 10.0;
 
-        while (index < str.length())
+        while (index < _str.length())
         {
-            digit = str[index++];
+            digit = _str[index++];
 
             if (digit >= '0' && digit <= '9')
                 result = result * 10.0 + (digit - '0');
@@ -53,14 +69,14 @@ namespace fr {
             }
         }
 
-        if (index < str.length())
-            digit = str[index++];
+        if (index < _str.length())
+            digit = _str[index++];
 
         if (digit == '.')
         {
-            while (index < str.length())
+            while (index < _str.length())
             {
-                digit = str[index++];
+                digit = _str[index++];
 
                 if (digit >= '0' && digit <= '9')
                 {
@@ -80,24 +96,24 @@ namespace fr {
         return result;
     }
 
-    double identifier(std::string& str, unsigned& index)
+    double Formula::identifier(unsigned& index)
     {
         std::string name = "";
         double result;
 
-        while (index < str.length() &&
-            ((str[index] >= 'a' && str[index] <= 'z') ||
-                (str[index] >= 'A' && str[index] <= 'Z') ||
-                (str[index] >= '0' && str[index] <= '9') ||
-                (str[index] == '_')))
-            name += str[index++];
+        while (index < _str.length() &&
+            ((_str[index] >= 'a' && _str[index] <= 'z') ||
+                (_str[index] >= 'A' && _str[index] <= 'Z') ||
+                (_str[index] >= '0' && _str[index] <= '9') ||
+                (_str[index] == '_')))
+            name += _str[index++];
 
-        if (index < str.length() && str[index] == '(')
+        if (index < _str.length() && _str[index] == '(')
         {
             ++index;
-            result = function(name, str, index);
+            result = function(name, index);
 
-            if (index >= str.length() || str[index] != ')')
+            if (index >= _str.length() || _str[index] != ')')
             {
                 std::cout << "Ожидается \")\" в позиции " << index + 2 << std::endl;
                 exit(-1);
@@ -120,9 +136,9 @@ namespace fr {
         return result;
     }
 
-    double function(std::string& name, std::string& str, unsigned& index)
+    double Formula::function(std::string& name, unsigned& index)
     {
-        double argument = expr(str, index);
+        double argument = expr(index);
 
         if (strcmp(name.c_str(), "acos") == 0)
             return acos(argument);
@@ -167,22 +183,22 @@ namespace fr {
         exit(-1);
     }
 
-    double base(std::string& str, unsigned& index)
+    double Formula::base(unsigned& index)
     {
         double result;
 
-        if (index >= str.length())
+        if (index >= _str.length())
         {
             std::cout << "Неожиданный конец строки" << std::endl;
             exit(-1);
         }
 
-        if (str[index] == '(')
+        if (_str[index] == '(')
         {
             ++index;
-            result = expr(str, index);
+            result = expr(index);
 
-            if (index >= str.length() || str[index] != ')')
+            if (index >= _str.length() || _str[index] != ')')
             {
                 std::cout << "Ожидается \")\" в позиции " << index + 2 << std::endl;
                 exit(-1);
@@ -192,14 +208,14 @@ namespace fr {
         }
         else
         {
-            if (str[index] >= '0' && str[index] <= '9')
-                result = number(str, index);
+            if (_str[index] >= '0' && _str[index] <= '9')
+                result = number(index);
             else
             {
-                if ((str[index] >= 'A' && str[index] <= 'Z') ||
-                    (str[index] >= 'a' && str[index] <= 'z') ||
-                    (str[index] == '_'))
-                    result = identifier(str, index);
+                if ((_str[index] >= 'A' && _str[index] <= 'Z') ||
+                    (_str[index] >= 'a' && _str[index] <= 'z') ||
+                    (_str[index] == '_'))
+                    result = identifier(index);
                 else
                 {
                     std::cout << "Некорректный символ в позиции " << index + 1 << std::endl;
@@ -211,26 +227,26 @@ namespace fr {
         return result;
     }
 
-    double expr(std::string& str, unsigned& index)
+    double Formula::expr(unsigned& index)
     {
         double result;
         char operation;
 
-        result = term(str, index);
+        result = term(index);
 
-        while (index < str.length() &&
-            (str[index] == '+' || str[index] == '-'))
+        while (index < _str.length() &&
+            (_str[index] == '+' || _str[index] == '-'))
         {
-            operation = str[index];
+            operation = _str[index];
             ++index;
 
             switch (operation)
             {
             case '+':
-                result += term(str, index);
+                result += term(index);
                 break;
             case '-':
-                result -= term(str, index);
+                result -= term(index);
                 break;
             }
         }
@@ -238,27 +254,27 @@ namespace fr {
         return result;
     }
 
-    double term(std::string& str, unsigned& index)
+    double Formula::term(unsigned& index)
     {
         double result;
         char operation;
         double div;
 
-        result = factor(str, index);
+        result = factor(index);
 
-        while (index < str.length() &&
-            (str[index] == '*' || str[index] == '/'))
+        while (index < _str.length() &&
+            (_str[index] == '*' || _str[index] == '/'))
         {
-            operation = str[index];
+            operation = _str[index];
             ++index;
 
             switch (operation)
             {
             case '*':
-                result *= factor(str, index);
+                result *= factor(index);
                 break;
             case '/':
-                div = factor(str, index);
+                div = factor(index);
 
                 if (div == 0.0)
                 {
@@ -274,45 +290,45 @@ namespace fr {
         return result;
     }
 
-    double factor(std::string& str, unsigned& index)
+    double Formula::factor(unsigned& index)
     {
         double result;
 
-        if (index >= str.length())
+        if (index >= _str.length())
         {
             std::cout << "Неожиданный конец строки" << std::endl;
             exit(-1);
         }
 
-        switch (str[index])
+        switch (_str[index])
         {
         case '+':
             ++index;
-            result = factor(str, index);
+            result = factor(index);
             break;
         case '-':
             ++index;
-            result = -factor(str, index);
+            result = -factor(index);
             break;
         default:
-            result = base(str, index);
+            result = base(index);
 
-            if (index <= str.length() - 1 && str[index] == '^')
+            if (index <= _str.length() - 1 && _str[index] == '^')
             {
                 ++index;
-                result = pow(result, factor(str, index));
+                result = pow(result, factor(index));
             }
         }
 
         return result;
     }
 
-    double calculate(std::string& str)
+    double Formula::calculate()
     {
         unsigned index = 0;
-        double result = expr(str, index);
+        double result = expr(index);
 
-        if (index < str.length() - 1)
+        if (index < _str.length() - 1)
         {
             std::cout << "Некорректный символ в позиции " << index + 1 << std::endl;
             exit(-1);

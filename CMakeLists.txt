@@ -18,10 +18,11 @@ include_directories("inc/")
 link_directories("ext/SFML/lib/")	
 
 add_executable("${PROJECT_NAME}" main.cpp 
-								inc/FormRec.h
+								inc/field.h
+								src/formula.cpp
 								inc/textbox.h
+								inc/formula.h
 								inc/button.h
-								src/FormRec.cpp
 								src/textbox.cpp
 								src/button.cpp)
 
