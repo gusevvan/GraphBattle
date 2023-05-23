@@ -31,4 +31,15 @@ file(COPY "ext/my_font.ttf" DESTINATION ".")
 											
 target_link_libraries("${PROJECT_NAME}" sfml-graphics-s-d
 						  sfml-window-s-d
-						  sfml-system-s-d)
+						  sfml-system-s-d
+						  opengl32
+						  freetype
+						  winmm
+						  gdi32
+						  sfml-audio-s-d
+						  openal32
+						  flac
+						  vorbisenc
+						  vorbisfile
+						  vorbis
+						  ogg)

@@ -39,7 +39,8 @@ namespace gm {
 
     class Field : public sf::Drawable {
     private:
-        std::vector<point> _buffer;
+        double point_x = 2;
+        double point_y = 300;
         std::vector<sf::CircleShape> _blacks, _whites, _reds;
         Ox _ox;
         Oy _oy;
@@ -65,7 +66,6 @@ namespace gm {
         void changeFormulaStatus();
 
         bool checkCrash();
-
         double getGrX() {
             return _grX;
         }

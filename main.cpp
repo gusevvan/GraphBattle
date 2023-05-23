@@ -7,6 +7,7 @@
 #include <textbox.h>
 #include <field.h>
 #include <button.h>
+#include <thread>
 
 int main()
 {
@@ -32,8 +33,10 @@ int main()
     uiPlace.setPosition(0.f, 602.f);
     uiPlace.setFillColor(sf::Color(124, 124, 124));
 
-    bt::Button button;
-
+    bt::Button button("Fire");
+    button.setPosition(350,700);
+    button.setTextColor(255, 102, 0);
+    
     gm::Field field;
 
     gm::Formula formula;
@@ -46,7 +49,6 @@ int main()
     bool isFormula = false;
 
     int x = 0, y = 0;
-
     while (window.isOpen())
     {
         sf::Event event;
@@ -130,8 +132,7 @@ int main()
             }
             field.hitTarget();
         }
-
-
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
         window.display();
     }
 
