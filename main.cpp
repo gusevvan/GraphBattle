@@ -18,11 +18,15 @@ int main()
     sf::Font font;
     font.loadFromFile("my_font.ttf");
 
-    sf::Text text;
-    text.setFont(font);
-    text.setString("y=");
-    text.setColor(sf::Color::White);
-    text.setPosition(200, 650);
+    sf::Text invate;
+    invate.setFont(font);
+    invate.setString("y=");
+    invate.setPosition(200, 650);
+    sf::Text targets;
+    targets.setFont(font);
+    targets.setFillColor(sf::Color::Red);
+    targets.setString("5");
+    targets.setPosition(700, 650);
 
     sf::RectangleShape uiPlace(sf::Vector2f(800.f, 200.f));
     uiPlace.setPosition(0.f, 602.f);
@@ -45,11 +49,13 @@ int main()
     {
         window.clear();
         sf::Event event;
+        targets.setString(field.getTargets());
         window.draw(field);
         window.draw(uiPlace);
         window.draw(textBox);
         window.draw(button);
-        window.draw(text);
+        window.draw(invate);
+        window.draw(targets);
 
         while (window.pollEvent(event))
         {
@@ -112,6 +118,7 @@ int main()
                 field.updateGraph();
             }
             isFormula = !field.checkCrash();
+            field.hitTarget();
         }
 
 
