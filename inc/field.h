@@ -39,8 +39,6 @@ namespace gm {
 
     class Field : public sf::Drawable {
     private:
-        double point_x = 2;
-        double point_y = 300;
         std::vector<sf::CircleShape> _blacks, _whites, _reds;
         Ox _ox;
         Oy _oy;
@@ -53,7 +51,7 @@ namespace gm {
 
         void generate();
 
-        void hitTarget();
+        bool checkTarget();
 
         std::string getTargets();
 
@@ -66,9 +64,8 @@ namespace gm {
         void changeFormulaStatus();
 
         bool checkCrash();
-        double getGrX() {
-            return _grX;
-        }
+
+        double getGrX();
 
         virtual void draw(sf::RenderTarget& render, sf::RenderStates states) const;
     };

@@ -7,7 +7,6 @@
 #include <textbox.h>
 #include <field.h>
 #include <button.h>
-#include <thread>
 
 int main()
 {
@@ -34,9 +33,9 @@ int main()
     uiPlace.setFillColor(sf::Color(124, 124, 124));
 
     bt::Button button("Fire");
-    button.setPosition(350,700);
+    button.setPosition(350, 700);
     button.setTextColor(255, 102, 0);
-    
+
     gm::Field field;
 
     gm::Formula formula;
@@ -49,20 +48,20 @@ int main()
     bool isFormula = false;
 
     int x = 0, y = 0;
+
     while (window.isOpen())
     {
         sf::Event event;
         if (!isFormula) {
             window.clear();
-            targets.setString(field.getTargets());
-            window.draw(uiPlace);
-            window.draw(textBox);
-            window.draw(button);
-            window.draw(invate);
-            window.draw(targets);
         }
-
+        targets.setString(field.getTargets());
         window.draw(field);
+        window.draw(uiPlace);
+        window.draw(textBox);
+        window.draw(button);
+        window.draw(invate);
+        window.draw(targets);
 
         while (window.pollEvent(event))
         {
@@ -122,17 +121,15 @@ int main()
         }
 
         if (isFormula) {
-            for (int i = 0; i < 8; ++i) {
-                field.setGrY(formula.calculate(field.getGrX()));
-                field.updateGraph();
-            }
-            isFormula = !field.checkCrash();
+            field.setGrY(formula.calculate(field.getGrX()));
+            isFormula = !field.checkCrash() && !field.checkTarget();
             if (!isFormula) {
                 field.changeFormulaStatus();
             }
-            field.hitTarget();
+            field.updateGraph();
         }
-        std::this_thread::sleep_for(std::chrono::microseconds(100));
+
+
         window.display();
     }
 

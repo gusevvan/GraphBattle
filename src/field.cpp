@@ -78,8 +78,8 @@ namespace gm {
 
         _backGround.setSize(sf::Vector2f(800.f, 602.f));
         _backGround.setFillColor(sf::Color::White);
-        _grX = 0;
-        _grY = 0;
+        _grX = 2;
+        _grY = 300;
 
         int rounds = rand() % 10 + 3;
 
@@ -93,18 +93,16 @@ namespace gm {
         }
 
         for (int i = 0; i < _targets; ++i) {
-            int radius = 14, Px = rand() % 601 + 200, Py = rand() % 601;
+            int radius = 10, Px = rand() % 601 + 200, Py = rand() % 601;
             sf::CircleShape shape1(radius);
             shape1.setOrigin(radius, radius);
             shape1.setPosition(Px, Py);
             shape1.setFillColor(sf::Color::Red);
-            shape1.setOutlineColor(sf::Color::White);
-            shape1.setOutlineThickness(2);
             _reds.push_back(shape1);
-            /*sf::CircleShape shape2(radius + 3);
+            sf::CircleShape shape2(radius + 3);
             shape2.setOrigin(radius + 3, radius + 3);
             shape2.setPosition(Px, Py);
-            _whites.push_back(shape2);*/
+            _whites.push_back(shape2);
         }
 
         sf::CircleShape shape(100);
@@ -113,18 +111,21 @@ namespace gm {
         _whites.push_back(shape);
     }
 
-    void Field::hitTarget() {
+    bool Field::checkTarget() {
         for (int i = 0; i < _reds.size(); ++i) {
-            if ((_reds[i].getPosition().x - point_x) * (_reds[i].getPosition().x - point_x) +
-                (_reds[i].getPosition().y - point_y) * (_reds[i].getPosition().y - point_y)
-                <= _reds[i].getRadius() * _reds[i].getRadius()) { 
-                    sf::CircleShape shape(14);
-                    shape.setOrigin(14, 14);
-                    shape.setPosition(_reds[i].getPosition().x, _reds[i].getPosition().y);
-                    _whites.push_back(shape);
+            if ((_reds[i].getPosition().x - _grX) * (_reds[i].getPosition().x - _grX) +
+                (_reds[i].getPosition().y - _grY) * (_reds[i].getPosition().y - _grY)
+                <= _reds[i].getRadius() * _reds[i].getRadius()) {
+                if (_reds[i].getFillColor() != sf::Color::White) {
+                    _reds[i].setFillColor(sf::Color::White);
                     --_targets;
+                    _grX = 2;
+                    _grY = 300;
+                    return true;
+                }
             }
         }
+        return false;
     }
 
     std::string Field::getTargets() {
@@ -139,27 +140,29 @@ namespace gm {
     }
 
     void Field::updateGraph() {
-        point_x = _grX + 2;
-        point_y = -_grY + 300;
         _grX += 0.1;
     }
 
+    double Field::getGrX() {
+        return _grX;
+    }
+
     void Field::setGrY(double newGrY) {
-        _grY = 30 * newGrY;
+        std::cout << newGrY << "\n";
+        _grY = 300 - 30 * newGrY;
     }
 
     bool Field::checkCrash() {
         bool isCrashed = false;
-        if (point_x > 800 || point_y > 600 || point_y < 0 || point_x < 0) {
-            _grX = 0;
-            _grY = 0;
-            
+        if (_grX > 800 || _grY > 600 || _grY < 0 || _grX < 0) {
+            _grX = 2;
+            _grY = 300;
             return true;
         }
         for (sf::CircleShape shape : _blacks) {
 
-            if ((shape.getPosition().x - point_x) * (shape.getPosition().x - point_x) +
-                (shape.getPosition().y - point_y) * (shape.getPosition().y - point_y)
+            if ((shape.getPosition().x - _grX) * (shape.getPosition().x - _grX) +
+                (shape.getPosition().y - _grY) * (shape.getPosition().y - _grY)
                 <= shape.getRadius() * shape.getRadius()) {
                 isCrashed = true;
                 break;
@@ -167,8 +170,8 @@ namespace gm {
         }
         if (isCrashed) {
             for (sf::CircleShape shape : _whites) {
-                if ((shape.getPosition().x - point_x) * (shape.getPosition().x - point_x) +
-                    (shape.getPosition().y - point_y) * (shape.getPosition().y - point_y)
+                if ((shape.getPosition().x - _grX) * (shape.getPosition().x - _grX) +
+                    (shape.getPosition().y - _grY) * (shape.getPosition().y - _grY)
                     <= (shape.getRadius() - 1) * (shape.getRadius() - 1)) {
                     isCrashed = false;
                     break;
@@ -177,11 +180,10 @@ namespace gm {
             if (isCrashed) {
                 sf::CircleShape shape(10);
                 shape.setOrigin(5, 5);
-                shape.setPosition(point_x, point_y);
+                shape.setPosition(_grX, _grY);
                 _whites.push_back(shape);
-                _grX = 0;
-                _grY = 0;
-                
+                _grX = 2;
+                _grY = 300;
             }
         }
         return isCrashed;
@@ -190,6 +192,7 @@ namespace gm {
     void Field::changeFormulaStatus() {
         _isFormula = !_isFormula;
     }
+
     void Field::draw(sf::RenderTarget& render, sf::RenderStates states) const
     {
         if (!_isFormula) {
@@ -199,11 +202,11 @@ namespace gm {
                 render.draw(shape, states);
             }
 
-            for (sf::CircleShape shape: _reds) {
+            for (sf::CircleShape shape: _whites) {
                 render.draw(shape, states);
             }
 
-            for (sf::CircleShape shape : _whites) {
+            for (sf::CircleShape shape : _reds) {
                 render.draw(shape, states);
             }
 
@@ -213,13 +216,10 @@ namespace gm {
         sf::CircleShape grPoint(2.f);
         grPoint.setFillColor(sf::Color::Blue);
 
-        grPoint.setPosition(point_x, point_y);
-        render.draw(grPoint, states);
-
-        /*for (point current : _buffer) {
-            std::cout << current.x << " " << current.y << "\n";
-            grPoint.setPosition(current.x, current.y);
+        if (_isFormula) {
+            grPoint.setPosition(_grX, _grY);
             render.draw(grPoint, states);
-        }*/
+        }
+
     }
 }
