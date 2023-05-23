@@ -128,6 +128,9 @@ namespace gm {
     {
         double argument = expr(str, index);
 
+        if (strcmp(name.c_str(), "abs") == 0)
+            return abs(argument);
+
         if (strcmp(name.c_str(), "acos") == 0)
             return acos(argument);
 

@@ -20,12 +20,12 @@ int main()
 
     sf::Text text;
     text.setFont(font);
-    text.setString("Enter formula here:");
+    text.setString("y=");
     text.setColor(sf::Color::White);
-    text.setPosition(80, 650);
+    text.setPosition(200, 650);
 
     sf::RectangleShape uiPlace(sf::Vector2f(800.f, 200.f));
-    uiPlace.setPosition(0.f, 600.f);
+    uiPlace.setPosition(0.f, 602.f);
     uiPlace.setFillColor(sf::Color(124, 124, 124));
 
     bt::Button button;

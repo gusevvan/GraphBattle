@@ -26,7 +26,7 @@ add_executable("${PROJECT_NAME}" main.cpp
 								src/textbox.cpp
 								src/button.cpp)
 
-file(COPY "my_font.ttf" DESTINATION ".")
+file(COPY "ext/my_font.ttf" DESTINATION ".")
 											
 target_link_libraries("${PROJECT_NAME}" sfml-graphics-s-d
 						  sfml-window-s-d

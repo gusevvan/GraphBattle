@@ -10,7 +10,7 @@ TextBox::TextBox()
     l_bound = 0;
     r_bound = 24;
 
-    m_text.setPosition(350, 650);
+    m_text.setPosition(240, 650);
     m_text.setString(m_newText.substring(l_bound, 25));
     m_text.setFont(font);
 
@@ -19,7 +19,7 @@ TextBox::TextBox()
 
     m_box.setFillColor(sf::Color::Blue);
     m_box.setSize(sf::Vector2f(370, 40));
-    m_box.setPosition(350, 650);
+    m_box.setPosition(240, 650);
     m_box.setOutlineColor(sf::Color::Cyan);
 }
 void TextBox::draw(sf::RenderTarget& render, sf::RenderStates states) const

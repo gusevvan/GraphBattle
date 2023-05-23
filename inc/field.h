@@ -63,7 +63,7 @@ namespace gm {
     class Oy : public Axis {
     public:
         Oy() {
-            _line.setSize(sf::Vector2f(3.f, 800.f));
+            _line.setSize(sf::Vector2f(3.f, 600.f));
             _line.setPosition(2, 0);
             _line.setFillColor(sf::Color(255, 102, 0));
             sf::RectangleShape segment(sf::Vector2f(10.f, 3.f));
@@ -74,26 +74,33 @@ namespace gm {
             text.setPosition(5, 3);
             text.setCharacterSize(16);
             text.setString("10");
+            _values.emplace_back(text);
             std::string value;
             for (int i = 9; i >= -9; --i) {
-                _segments.emplace_back(segment);
-                _values.emplace_back(text);
-                text.move(sf::Vector2f(0.f, 30.f));
-                segment.move(sf::Vector2f(0.f, 30.f));
                 if (i < 0) {
                     value += '-';
                 }
                 value += char(abs(i) + '0');
                 text.setString(value);
+                text.move(sf::Vector2f(0.f, 30.f));
+                _segments.emplace_back(segment);
+                _values.emplace_back(text);
+                segment.move(sf::Vector2f(0.f, 30.f));
                 value.clear();
             }
+            _segments.emplace_back(segment);
+            text.setString("-10");
+            text.move(sf::Vector2f(0.f, 30.f));
+            segment.move(sf::Vector2f(0.f, 30.f));
+            _segments.emplace_back(segment);
+            _values.emplace_back(text);
         }
     };
 
     class Field : public sf::Drawable {
     private:
         std::vector<point> _buffer;
-        std::vector<sf::CircleShape> _blacks, _whites;
+        std::vector<sf::CircleShape> _blacks, _whites, _reds;
         Ox _ox;
         Oy _oy;
         sf::RectangleShape _backGround;
@@ -104,7 +111,7 @@ namespace gm {
         void generate() {
             srand(time(NULL));
 
-            _backGround.setSize(sf::Vector2f(800.f, 600.f));
+            _backGround.setSize(sf::Vector2f(800.f, 602.f));
             _backGround.setFillColor(sf::Color::White);
             _grX = 0;
             _grY = 0;
@@ -119,6 +126,22 @@ namespace gm {
                 shape.setFillColor(sf::Color::Black);
                 _blacks.push_back(shape);
             }
+
+            int targets = 5;
+            
+            for (int i = 0; i < targets; ++i) {
+                int radius = 10, Px = rand() % 601 + 200, Py = rand() % 601;
+                sf::CircleShape shape1(radius);
+                shape1.setOrigin(radius, radius);
+                shape1.setPosition(Px, Py);
+                shape1.setFillColor(sf::Color::Red);
+                _reds.push_back(shape1);
+                sf::CircleShape shape2(radius + 3);
+                shape2.setOrigin(radius + 3, radius + 3);
+                shape2.setPosition(Px, Py);
+                _whites.push_back(shape2);
+            }
+
             sf::CircleShape shape(100);
             shape.setOrigin(sf::Vector2f(100.f, 100.f));
             shape.setPosition(2.f, 300.f);
@@ -189,17 +212,26 @@ namespace gm {
                 render.draw(shape, states);
             }
 
+            for (sf::CircleShape shape : _reds) {
+                render.draw(shape, states);
+            }
+
             render.draw(_ox, states);
             render.draw(_oy, states);
 
             sf::CircleShape grPoint(2.f);
             grPoint.setFillColor(sf::Color::Blue);
 
-            for (point current : _buffer) {
+            if (_buffer.size()) {
+                grPoint.move(_buffer.back().x, _buffer.back().y);
+                render.draw(grPoint, states);
+            }
+
+            /*for (point current : _buffer) {
                 std::cout << current.x << " " << current.y << "\n";
                 grPoint.setPosition(current.x, current.y);
                 render.draw(grPoint, states);
-            }
+            }*/
         }
     };
 }
