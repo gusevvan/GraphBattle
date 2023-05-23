@@ -183,25 +183,30 @@ namespace gm {
         return isCrashed;
     }
 
+    void Field::changeFormulaStatus() {
+        _isFormula = !_isFormula;
+    }
+
     void Field::draw(sf::RenderTarget& render, sf::RenderStates states) const
     {
-        render.draw(_backGround, states);
+        if (!_isFormula) {
+            render.draw(_backGround, states);
 
-        for (sf::CircleShape shape : _blacks) {
-            render.draw(shape, states);
+            for (sf::CircleShape shape: _blacks) {
+                render.draw(shape, states);
+            }
+
+            for (sf::CircleShape shape: _whites) {
+                render.draw(shape, states);
+            }
+
+            for (sf::CircleShape shape: _reds) {
+                render.draw(shape, states);
+            }
+
+            render.draw(_ox, states);
+            render.draw(_oy, states);
         }
-
-        for (sf::CircleShape shape : _whites) {
-            render.draw(shape, states);
-        }
-
-        for (sf::CircleShape shape : _reds) {
-            render.draw(shape, states);
-        }
-
-        render.draw(_ox, states);
-        render.draw(_oy, states);
-
         sf::CircleShape grPoint(2.f);
         grPoint.setFillColor(sf::Color::Blue);
 

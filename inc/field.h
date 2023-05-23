@@ -46,6 +46,7 @@ namespace gm {
         sf::RectangleShape _backGround;
         double _grX, _grY;
         int _targets = 5;
+        bool _isFormula = false;
     public:
         Field() = default;
 
@@ -60,6 +61,8 @@ namespace gm {
         void updateGraph();
 
         void setGrY(double newGrY);
+
+        void changeFormulaStatus();
 
         bool checkCrash();
 

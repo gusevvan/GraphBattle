@@ -45,17 +45,22 @@ int main()
 
     bool isFormula = false;
 
+    int x = 0, y = 0;
+
     while (window.isOpen())
     {
-        window.clear();
         sf::Event event;
-        targets.setString(field.getTargets());
+        if (!isFormula) {
+            window.clear();
+            targets.setString(field.getTargets());
+            window.draw(uiPlace);
+            window.draw(textBox);
+            window.draw(button);
+            window.draw(invate);
+            window.draw(targets);
+        }
+
         window.draw(field);
-        window.draw(uiPlace);
-        window.draw(textBox);
-        window.draw(button);
-        window.draw(invate);
-        window.draw(targets);
 
         while (window.pollEvent(event))
         {
@@ -87,6 +92,7 @@ int main()
                         fc.setFocusObject(0);
                         formula.setStr(text);
                         isFormula = true;
+                        field.changeFormulaStatus();
                     }
                 }
                 tb::FocusObject* fo = fc.getFocusObject();
@@ -105,6 +111,7 @@ int main()
                             fc.setFocusObject(0);
                             button.setOutLine(0);
                             formula.setStr(text);
+                            field.changeFormulaStatus();
                             isFormula = true;
                         }
                     }
@@ -118,6 +125,9 @@ int main()
                 field.updateGraph();
             }
             isFormula = !field.checkCrash();
+            if (!isFormula) {
+                field.changeFormulaStatus();
+            }
             field.hitTarget();
         }
 
