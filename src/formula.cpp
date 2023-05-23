@@ -314,7 +314,7 @@ namespace gm {
     double Formula::calculate(double grX)
     {
         std::ostringstream strs;
-        strs << grX / 20;
+        strs << grX / 80;
         std::string value = strs.str();
         std::string term;
         for (int i = 0; i < _str.size(); ++i) {

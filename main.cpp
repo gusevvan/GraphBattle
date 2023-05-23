@@ -39,8 +39,6 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "GraphBattle");
 
-    window.setFramerateLimit(60);
-
     bool isFormula = false;
 
     while (window.isOpen())
@@ -110,7 +108,7 @@ int main()
 
         if (isFormula) {
             for (int i = 0; i < 8; ++i) {
-                field.setGrY(20 * formula.calculate(field.getGrX()));
+                field.setGrY(formula.calculate(field.getGrX()));
                 field.updateGraph();
             }
             isFormula = !field.checkCrash();

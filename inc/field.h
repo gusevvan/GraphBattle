@@ -16,12 +16,86 @@ namespace gm {
         }
     };
 
+    class Axis : public sf::Drawable {
+    protected:
+        sf::RectangleShape _line;
+        std::vector<sf::RectangleShape> _segments;
+        std::vector<sf::Text> _values;
+    public:
+        Axis() = default;
+        virtual void draw(sf::RenderTarget& render, sf::RenderStates states) const {
+            render.draw(_line, states);
+            for (sf::RectangleShape shape : _segments) {
+                render.draw(shape, states);
+            }
+            sf::Font font;
+            font.loadFromFile("my_font.ttf");
+            for (sf::Text text : _values) {
+                text.setFont(font);
+                render.draw(text, states);
+            }
+        }
+    };
+
+    class Ox : public Axis {
+    public:
+        Ox() {
+            _line.setSize(sf::Vector2f(800.f, 3.f));
+            _line.setPosition(0, 300);
+            _line.setFillColor(sf::Color(255, 102, 0));
+            sf::RectangleShape segment(sf::Vector2f(3.f, 10.f));
+            segment.setFillColor(sf::Color(255, 102, 0));
+            segment.setPosition(2, 297);
+            sf::Text text;
+            text.setFillColor(sf::Color(255, 102, 0));
+            text.setPosition(5, 303);
+            text.setCharacterSize(16);
+            for (int i = 0; i < 10; ++i) {
+                text.setString(static_cast<char>(i + '0'));
+                _segments.emplace_back(segment);
+                _values.emplace_back(text);
+                text.move(sf::Vector2f(80.f, 0));
+                segment.move(sf::Vector2f(80.f, 0));
+            }
+        }
+    };
+
+    class Oy : public Axis {
+    public:
+        Oy() {
+            _line.setSize(sf::Vector2f(3.f, 800.f));
+            _line.setPosition(2, 0);
+            _line.setFillColor(sf::Color(255, 102, 0));
+            sf::RectangleShape segment(sf::Vector2f(10.f, 3.f));
+            segment.setFillColor(sf::Color(255, 102, 0));
+            segment.setPosition(0, 0);
+            sf::Text text;
+            text.setFillColor(sf::Color(255, 102, 0));
+            text.setPosition(5, 3);
+            text.setCharacterSize(16);
+            text.setString("10");
+            std::string value;
+            for (int i = 9; i >= -9; --i) {
+                _segments.emplace_back(segment);
+                _values.emplace_back(text);
+                text.move(sf::Vector2f(0.f, 30.f));
+                segment.move(sf::Vector2f(0.f, 30.f));
+                if (i < 0) {
+                    value += '-';
+                }
+                value += char(abs(i) + '0');
+                text.setString(value);
+                value.clear();
+            }
+        }
+    };
+
     class Field : public sf::Drawable {
     private:
         std::vector<point> _buffer;
         std::vector<sf::CircleShape> _blacks, _whites;
-        sf::RectangleShape _Ox;
-        sf::RectangleShape _Oy;
+        Ox _ox;
+        Oy _oy;
         sf::RectangleShape _backGround;
         double _grX, _grY;
     public:
@@ -32,13 +106,6 @@ namespace gm {
 
             _backGround.setSize(sf::Vector2f(800.f, 600.f));
             _backGround.setFillColor(sf::Color::White);
-            _Oy.setSize(sf::Vector2f(800.f, 3.f));
-            _Oy.setPosition(0, 300);
-            _Ox.setSize(sf::Vector2f(3.f, 600.f));
-            _Ox.setPosition(400, 0);
-            _Oy.setFillColor(sf::Color(255, 102, 0));
-            _Ox.setFillColor(sf::Color(255, 102, 0));
-            _buffer.emplace_back(400, 300);
             _grX = 0;
             _grY = 0;
 
@@ -52,15 +119,19 @@ namespace gm {
                 shape.setFillColor(sf::Color::Black);
                 _blacks.push_back(shape);
             }
+            sf::CircleShape shape(100);
+            shape.setOrigin(sf::Vector2f(100.f, 100.f));
+            shape.setPosition(2.f, 300.f);
+            _whites.push_back(shape);
         }
 
         void updateGraph() {       
-            _buffer.emplace_back(_grX + 400, -_grY + 300);
-            _grX += 0.25;
+            _buffer.emplace_back(_grX + 2, -_grY + 300);
+            _grX += 0.1;
         }
 
         void setGrY(double newGrY) {
-            _grY = newGrY;
+            _grY = 30 * newGrY;
         }
 
         bool checkCrash() {
@@ -84,7 +155,7 @@ namespace gm {
                 for (sf::CircleShape shape : _whites) {
                     if ((shape.getPosition().x - _buffer.back().x) * (shape.getPosition().x - _buffer.back().x) +
                         (shape.getPosition().y - _buffer.back().y) * (shape.getPosition().y - _buffer.back().y)
-                        <= 81) {
+                        <= (shape.getRadius() - 1) * (shape.getRadius() - 1)) {
                         isCrashed = false;
                         break;
                     }
@@ -118,15 +189,16 @@ namespace gm {
                 render.draw(shape, states);
             }
 
-            render.draw(_Ox, states);
-            render.draw(_Oy, states);
+            render.draw(_ox, states);
+            render.draw(_oy, states);
+
+            sf::CircleShape grPoint(2.f);
+            grPoint.setFillColor(sf::Color::Blue);
 
             for (point current : _buffer) {
                 std::cout << current.x << " " << current.y << "\n";
-                sf::CircleShape shape(3.f);
-                shape.setFillColor(sf::Color::Blue);
-                shape.setPosition(current.x, current.y);
-                render.draw(shape, states);
+                grPoint.setPosition(current.x, current.y);
+                render.draw(grPoint, states);
             }
         }
     };
