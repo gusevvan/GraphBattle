@@ -10,7 +10,7 @@
 
 int main()
 {
-
+    
     tb::FocusController fc;
     tb::TextBox textBox;
 
@@ -29,6 +29,13 @@ int main()
     targets.setString("5");
     targets.setPosition(700, 650);
 
+    sf::Text error_text;
+    error_text.setFont(font);
+    error_text.setFillColor(sf::Color::Red);
+    error_text.setString("Error: ");
+    error_text.setPosition(240, 750);
+
+    
     sf::RectangleShape uiPlace(sf::Vector2f(800.f, 200.f));
     uiPlace.setPosition(0.f, 602.f);
     uiPlace.setFillColor(sf::Color(124, 124, 124));
@@ -61,6 +68,11 @@ int main()
 
     gm::Formula formula;
 
+    sf::Text error;
+    error.setFont(font);
+    error.setFillColor(sf::Color::Red);
+    error.setString(formula.getError());
+    error.setPosition(350, 750);
 
     
 
@@ -86,12 +98,16 @@ int main()
         clock.restart();
         time /= 800;
 
+        error.setString(formula.getError());
         field.updateTime(time);
         targets.setString(field.getTargets());
+        
         window.draw(field);
         window.draw(uiPlace);
         window.draw(textBox);
         window.draw(button);
+        window.draw(error);
+        window.draw(error_text);
         for (int i = 1; i < buttons.size(); ++i)
         {
             window.draw(*buttons[i]);

@@ -230,6 +230,7 @@ namespace gm {
 
         if (_isFormula)
         {
+            
             _grPoint.setPosition(_grX, _grY);
             render.draw(_grPoint, states);
         }

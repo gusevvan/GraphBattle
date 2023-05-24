@@ -7,6 +7,7 @@ namespace gm {
 	private:
 		std::string _str;
 		std::map< std::string, double > vars;
+		std::string _error = "null";
 	public:
 
 		void setStr(std::string& str);
@@ -26,5 +27,7 @@ namespace gm {
 		double factor(std::string& str, unsigned& index);
 
 		double calculate(double grX);
+
+		std::string getError();
 	};
 }
