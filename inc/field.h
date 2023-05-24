@@ -43,9 +43,11 @@ namespace gm {
         Ox _ox;
         Oy _oy;
         sf::RectangleShape _backGround;
+        mutable sf::CircleShape _grPoint;
         double _grX, _grY;
         int _targets = 5;
         bool _isFormula = false;
+        float _time;
     public:
         Field() = default;
 
@@ -68,5 +70,7 @@ namespace gm {
         double getGrX();
 
         virtual void draw(sf::RenderTarget& render, sf::RenderStates states) const;
+        
+        void updateTime(const float& time);
     };
 }

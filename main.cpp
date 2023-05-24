@@ -48,13 +48,21 @@ int main()
     bool isFormula = false;
 
     int x = 0, y = 0;
-
+    
+    sf::Clock clock;
+    
+    
     while (window.isOpen())
     {
         sf::Event event;
         if (!isFormula) {
             window.clear();
         }
+        float time = clock.getElapsedTime().asMicroseconds();
+        clock.restart();
+        time /= 800;
+
+        field.updateTime(time);
         targets.setString(field.getTargets());
         window.draw(field);
         window.draw(uiPlace);
@@ -62,7 +70,7 @@ int main()
         window.draw(button);
         window.draw(invate);
         window.draw(targets);
-
+        
         while (window.pollEvent(event))
         {
             
@@ -129,6 +137,7 @@ int main()
             field.updateGraph();
         }
 
+        
 
         window.display();
     }

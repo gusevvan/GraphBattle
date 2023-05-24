@@ -105,6 +105,10 @@ namespace gm {
             _whites.push_back(shape2);
         }
 
+        _grPoint.setRadius(2.f);
+        _grPoint.setFillColor(sf::Color::Blue);
+        _grPoint.setPosition(2, 300);
+
         sf::CircleShape shape(100);
         shape.setOrigin(sf::Vector2f(100.f, 100.f));
         shape.setPosition(2.f, 300.f);
@@ -121,6 +125,7 @@ namespace gm {
                     --_targets;
                     _grX = 2;
                     _grY = 300;
+                    _grPoint.setPosition(2, 300);
                     return true;
                 }
             }
@@ -140,7 +145,7 @@ namespace gm {
     }
 
     void Field::updateGraph() {
-        _grX += 0.1;
+        _grX += 0.01 * _time * 10;
     }
 
     double Field::getGrX() {
@@ -148,7 +153,6 @@ namespace gm {
     }
 
     void Field::setGrY(double newGrY) {
-        std::cout << newGrY << "\n";
         _grY = 300 - 30 * newGrY;
     }
 
@@ -157,6 +161,7 @@ namespace gm {
         if (_grX > 800 || _grY > 600 || _grY < 0 || _grX < 0) {
             _grX = 2;
             _grY = 300;
+            _grPoint.setPosition(2, 300);
             return true;
         }
         for (sf::CircleShape shape : _blacks) {
@@ -184,6 +189,7 @@ namespace gm {
                 _whites.push_back(shape);
                 _grX = 2;
                 _grY = 300;
+                _grPoint.setPosition(2, 300);
             }
         }
         return isCrashed;
@@ -192,7 +198,10 @@ namespace gm {
     void Field::changeFormulaStatus() {
         _isFormula = !_isFormula;
     }
-
+    void Field::updateTime(const float& time)
+    {
+        _time = time;
+    }
     void Field::draw(sf::RenderTarget& render, sf::RenderStates states) const
     {
         if (!_isFormula) {
@@ -213,12 +222,12 @@ namespace gm {
             render.draw(_ox, states);
             render.draw(_oy, states);
         }
-        sf::CircleShape grPoint(2.f);
-        grPoint.setFillColor(sf::Color::Blue);
+        
 
-        if (_isFormula) {
-            grPoint.setPosition(_grX, _grY);
-            render.draw(grPoint, states);
+        if (_isFormula)
+        {
+            _grPoint.setPosition(_grX, _grY);
+            render.draw(_grPoint, states);
         }
 
     }
