@@ -22,6 +22,7 @@ int main()
     invate.setFont(font);
     invate.setString("y=");
     invate.setPosition(200, 650);
+    
     sf::Text targets;
     targets.setFont(font);
     targets.setFillColor(sf::Color::Red);
@@ -32,26 +33,49 @@ int main()
     uiPlace.setPosition(0.f, 602.f);
     uiPlace.setFillColor(sf::Color(124, 124, 124));
 
+    std::vector<bt::Button*> buttons;
+
     bt::Button button("Fire");
     button.setPosition(350, 700);
     button.setTextColor(255, 102, 0);
+    buttons.push_back(&button);
+
+    bt::Button buttonEasy("Easy");
+    buttonEasy.setPosition(10, 650);
+    buttonEasy.setTextColor(0, 128, 0);
+    buttons.push_back(&buttonEasy);
+
+    bt::Button buttonNormal("Normal");
+    buttonNormal.setPosition(10, 700);
+    buttonNormal.setTextColor(255, 255, 0);
+    buttons.push_back(&buttonNormal);
+
+    bt::Button buttonHard("Hard");
+    buttonHard.setPosition(10, 750);
+    buttonHard.setTextColor(220, 20, 60);
+    buttons.push_back(&buttonHard);
+
+
 
     gm::Field field;
 
     gm::Formula formula;
 
-    field.generate();
+
     
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "GraphBattle");
 
     bool isFormula = false;
 
+    //field.generate();
+    bool hasStarted = false;
+
     int x = 0, y = 0;
-    
+
     sf::Clock clock;
-    
-    
+
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -68,41 +92,70 @@ int main()
         window.draw(uiPlace);
         window.draw(textBox);
         window.draw(button);
+        for (int i = 1; i < buttons.size(); ++i)
+        {
+            window.draw(*buttons[i]);
+        }
         window.draw(invate);
         window.draw(targets);
-        
+
         while (window.pollEvent(event))
         {
-            
+
             if (event.type == sf::Event::Closed)
                 window.close();
             if (!isFormula) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
                 
-                button.setOutLine(button.Contains(mousePos.x, mousePos.y));
+                for (int i = 1; i < buttons.size(); ++i)
+                {
+                    buttons[i]->setOutLine((!hasStarted)*buttons[i]->Contains(mousePos.x, mousePos.y));
+                }
+                
+                button.setOutLine((hasStarted) * button.Contains(mousePos.x, mousePos.y));
+                textBox.setOutLine((hasStarted) * textBox.Contains(mousePos.x, mousePos.y));
 
                 if (event.type == sf::Event::MouseButtonPressed)
                 {
-                    if (textBox.Contains(mousePos.x, mousePos.y))
+                    if (hasStarted)
                     {
-                        fc.setFocusObject(&textBox);
+                        if (textBox.Contains(mousePos.x, mousePos.y))
+                        {
+                            fc.setFocusObject(&textBox);
+                        }
+                        else
+                        {
+                            fc.setFocusObject(0);
+                        }
+                        if (button.Contains(mousePos.x, mousePos.y)) {
+                            auto a = textBox.getStr();
+                            std::string text;
+                            for (int i = 0; i < textBox.getSize(); ++i) {
+                                text += *(a + i);
+                            }
+                            button.setOutLine(0);
+                            fc.setFocusObject(0);
+                            formula.setStr(text);
+                            isFormula = true;
+                            field.changeFormulaStatus();
+                        }
                     }
                     else
                     {
-                        fc.setFocusObject(0);
-                    }
-                    if (button.Contains(mousePos.x, mousePos.y)) {
-                        auto a = textBox.getStr();
-                        std::string text;
-                        for (int i = 0; i < textBox.getSize(); ++i) {
-                            text += *(a + i);
+                        for (int i = 1; i < buttons.size(); ++i)
+                        {
+                            if (buttons[i]->Contains(mousePos.x, mousePos.y))
+                            {
+
+                                field.setTargets(i * 2 + 1);
+                                field.setRadiusReds(40 - (i*10));
+                                hasStarted = true;
+                                field.generate();
+                            }
                         }
-                        button.setOutLine(0);
-                        fc.setFocusObject(0);
-                        formula.setStr(text);
-                        isFormula = true;
-                        field.changeFormulaStatus();
                     }
+                    
                 }
                 tb::FocusObject* fo = fc.getFocusObject();
                 if (fo != 0)

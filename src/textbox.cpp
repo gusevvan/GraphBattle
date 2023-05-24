@@ -40,7 +40,7 @@ bool TextBox::Contains(const int& x, const int& y)
 {
     return m_box.getGlobalBounds().contains(x, y);
 }
-void TextBox::event(const sf::Event& event, const int& x, const int& y)
+void TextBox::event(const sf::Event& event)
 {
     if (event.type == sf::Event::TextEntered)
     {
@@ -169,16 +169,16 @@ void TextBox::event(const sf::Event& event, const int& x, const int& y)
             break;
         }
     }
-    else if (event.type == sf::Event::MouseMoved)
+}
+void TextBox::setOutLine(const int& flag)
+{
+    if (flag == 1)
     {
-        if (Contains(x, y))
-        {
-            this->m_box.setOutlineThickness(2);
-        }
-        else
-        {
-            this->m_box.setOutlineThickness(0);
-        }
+        this->m_box.setOutlineThickness(2);
+    }
+    else
+    {
+        this->m_box.setOutlineThickness(0);
     }
 }
 

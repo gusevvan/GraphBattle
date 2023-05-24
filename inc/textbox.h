@@ -9,7 +9,7 @@ namespace tb
     public:
         virtual void setFocus() = 0;
         virtual void deleteFocus() = 0;
-        virtual void event(const sf::Event&, const int& x=0, const int& y=0) = 0;
+        virtual void event(const sf::Event&) = 0;
     };
 
 
@@ -36,10 +36,11 @@ namespace tb
         void draw(sf::RenderTarget& render, sf::RenderStates states) const;
         void setFocus() override;
         void deleteFocus() override;
-        void event(const sf::Event& event, const int& x = 0, const int& y = 0);
+        void event(const sf::Event& event);
         bool Contains(const int& x, const int& y);
         const sf::Uint32* getStr();
         int getSize();
+        void TextBox::setOutLine(const int& flag);
         private:
         void setText(const sf::String& str);
         void updateText();

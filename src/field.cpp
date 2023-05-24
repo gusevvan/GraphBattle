@@ -72,7 +72,7 @@ namespace gm {
         _segments.emplace_back(segment);
         _values.emplace_back(text);
     }
-
+    
     void Field::generate() {
         srand(time(NULL));
 
@@ -93,14 +93,14 @@ namespace gm {
         }
 
         for (int i = 0; i < _targets; ++i) {
-            int radius = 10, Px = rand() % 601 + 200, Py = rand() % 601;
-            sf::CircleShape shape1(radius);
-            shape1.setOrigin(radius, radius);
+            int Px = rand() % 601 + 200, Py = rand() % 601;
+            sf::CircleShape shape1(_radius_reds);
+            shape1.setOrigin(_radius_reds, _radius_reds);
             shape1.setPosition(Px, Py);
             shape1.setFillColor(sf::Color::Red);
             _reds.push_back(shape1);
-            sf::CircleShape shape2(radius + 3);
-            shape2.setOrigin(radius + 3, radius + 3);
+            sf::CircleShape shape2(_radius_reds + 3);
+            shape2.setOrigin(_radius_reds + 3, _radius_reds + 3);
             shape2.setPosition(Px, Py);
             _whites.push_back(shape2);
         }
@@ -140,10 +140,14 @@ namespace gm {
 
     }
 
-    void Field::setTargets(int targets) {
+    void Field::setTargets(const int& targets) {
         _targets = targets;
     }
 
+    void Field::setRadiusReds(const int& radius)
+    {
+        _radius_reds = radius;
+    }
     void Field::updateGraph() {
         _grX += 0.01 * _time * 10;
     }

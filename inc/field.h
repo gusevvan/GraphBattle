@@ -45,7 +45,8 @@ namespace gm {
         sf::RectangleShape _backGround;
         mutable sf::CircleShape _grPoint;
         double _grX, _grY;
-        int _targets = 5;
+        int _targets=0;
+        int _radius_reds=0;
         bool _isFormula = false;
         float _time;
     public:
@@ -57,7 +58,9 @@ namespace gm {
 
         std::string getTargets();
 
-        void setTargets(int targets);
+        void setTargets(const int& targets);
+
+        void setRadiusReds(const int& radius);
 
         void updateGraph();
 
