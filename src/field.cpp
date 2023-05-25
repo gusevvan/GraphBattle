@@ -76,12 +76,13 @@ namespace gm {
     void Field::generate() {
         srand(time(NULL));
 
+        _whites.clear();
+        _blacks.clear();
         _backGround.setSize(sf::Vector2f(800.f, 602.f));
         _backGround.setFillColor(sf::Color::White);
 
-        int rounds = rand() % 10 + 3;
 
-        for (int i = 0; i < rounds; ++i) {
+        for (int i = 0; i < _rounds; ++i) {
             int radius = rand() % 100 + 10, Px = rand() % 801, Py = rand() % 601;
             sf::CircleShape shape(radius);
             shape.setOrigin(radius, radius);
@@ -146,13 +147,29 @@ namespace gm {
         _targets = targets;
     }
 
+    void Field::setRounds(const int& level)
+    {
+        switch (level)
+        {
+        case 1:
+            _rounds = rand() % 5 + 3;
+            break;
+        case 2:
+            _rounds = rand() % 8 + 5;
+            break;
+        case 3:
+            _rounds = rand() % 11 + 8;
+            break;
+        default:break;
+        }
+    }
     void Field::setRadiusReds(const int& radius)
     {
         _radius_reds = radius;
     }
 
     void Field::updateGraph() {
-        _grX += 0.01 * _time * 10;
+        _grX += 0.01 * _time * 100;
     }
 
     double Field::getGrX() {

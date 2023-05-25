@@ -23,6 +23,8 @@ add_executable("${PROJECT_NAME}" main.cpp
 								inc/textbox.h
 								inc/formula.h
 								inc/logger.h
+								inc/msgr.h
+								src/msgr.cpp
 								src/formula.cpp
 								src/field.cpp			
 								src/textbox.cpp

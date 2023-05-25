@@ -45,11 +45,12 @@ namespace gm {
         sf::RectangleShape _backGround;
         mutable sf::CircleShape _grPoint;
         double _grX = 2, _grY = 300;
-        int _targets=0;
+        int _targets=1;
         int _radius_reds=0;
         double _delta = 0;
         bool _isFormula = false;
         float _time;
+        int _rounds = 0;
     public:
         Field() = default;
 
@@ -64,6 +65,8 @@ namespace gm {
         void setTargets(const int& targets);
 
         void setRadiusReds(const int& radius);
+
+        void setRounds(const int& level);
 
         void updateGraph();
 
