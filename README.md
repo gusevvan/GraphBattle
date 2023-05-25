@@ -1,4 +1,4 @@
-# GraphBattle
+# GraphShoot
 Операционная система: windows.
 Для запуска программы развернуть проект в visual studio.
 Использовалась среда разработки visual studio 2022, компилятор visual studio.
