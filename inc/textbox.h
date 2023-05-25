@@ -18,19 +18,15 @@ namespace tb
     {
     private:
         mutable sf::Font font;
-        
+
         mutable sf::RectangleShape m_box;
-        
+
         mutable sf::Text m_text;
         mutable sf::String m_newText;
-        
+
         mutable int carriage;
         mutable sf::RectangleShape carriage_box;
-        
-        int l_bound;
-        int r_bound;
 
-        int v_carriage;
     public:
         TextBox();
         void draw(sf::RenderTarget& render, sf::RenderStates states) const;
@@ -41,7 +37,7 @@ namespace tb
         const sf::Uint32* getStr();
         int getSize();
         void TextBox::setOutLine(const int& flag);
-        private:
+    private:
         void setText(const sf::String& str);
         void updateText();
         void updateVCarriage();
@@ -58,7 +54,7 @@ namespace tb
         FocusController(FocusObject* obj = 0);
         void setFocusObject(FocusObject* new_obj);
         FocusObject* getFocusObject();
-    
+
     };
 
 }

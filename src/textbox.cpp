@@ -5,13 +5,10 @@ TextBox::TextBox()
     m_newText = "";
     font.loadFromFile("my_font.ttf");
 
-    v_carriage = 0;
-    carriage = -1;
-    l_bound = 0;
-    r_bound = 24;
+    carriage = 0;
 
     m_text.setPosition(240, 650);
-    m_text.setString(m_newText.substring(l_bound, 25));
+    m_text.setString(m_newText.substring(0, 25));
     m_text.setFont(font);
 
     carriage_box.setSize(sf::Vector2f(1, 35));
@@ -32,7 +29,7 @@ void TextBox::setFocus()
 {
     m_box.setFillColor(sf::Color::Red);
 }
-void TextBox::deleteFocus() 
+void TextBox::deleteFocus()
 {
     m_box.setFillColor(sf::Color::Blue);
 }
@@ -44,82 +41,38 @@ void TextBox::event(const sf::Event& event)
 {
     if (event.type == sf::Event::TextEntered)
     {
-        //Обработка ввода
+        char temp_char = event.text.unicode;
+        //input
         switch (event.text.unicode)
         {
         case 0xD: //Return
-            if (carriage != -1)
-            {
-                char temp_char = event.text.unicode;
-                m_newText.insert(carriage + 1, temp_char);
-                carriage++;
-                updateText();
-                if (v_carriage != 25)
-                {
-                    v_carriage++;
-                    updateVCarriage();
-                }
-            }
-            else
-            {
-                char temp_char = event.text.unicode;
-                m_newText.insert(0, temp_char);
-                carriage++;
-                v_carriage++;
-                updateVCarriage();
-                updateText();
-            }
+            
+            m_newText.insert(carriage, temp_char);
+            carriage++;
+            updateText();
+            updateVCarriage();
             break;
         case 0x8://Backspace
             if (!m_newText.isEmpty())
             {
-                if (carriage != -1)
+                if (carriage != 0)
                 {
-                    m_newText.erase(carriage);
-                    if (v_carriage == 0)
-                    {
-                        updateText();
-                        if (r_bound - l_bound < 24)
-                        {
-                            v_carriage = carriage;
-                            updateVCarriage();
-                        }
-
-                    }
-                    else
-                    {
-                        updateText();
-                        v_carriage--;
-                        updateVCarriage();
-
-                    }
-                    updateText();
                     carriage--;
                 }
+                m_newText.erase(carriage);
+                
+                updateText();
+                updateVCarriage();
+                
+                
             }
-
             break;
         default:
-        {
-            if (carriage != -1)
-            {
-                m_newText.insert(carriage + 1, static_cast<wchar_t>(event.text.unicode));
-                carriage++;
-                updateText();
-                if (v_carriage != 25)
-                {
-                    v_carriage++;
-                    updateVCarriage();
-                }
-            }
-            else
-            {
-                m_newText.insert(0, static_cast<wchar_t>(event.text.unicode));
-                carriage++;
-                v_carriage++;
-                updateVCarriage();
-                updateText();
-            }
+        {  
+            m_newText.insert(carriage , static_cast<wchar_t>(event.text.unicode));
+            carriage++;
+            updateText();
+            updateVCarriage();
         }
         }
     }
@@ -130,18 +83,11 @@ void TextBox::event(const sf::Event& event)
         case sf::Keyboard::Left:
             if (!m_newText.isEmpty())
             {
-                if (carriage != -1)
+                if (carriage != 0)
                 {
-                    if (v_carriage != 0)
-                    {
-                        v_carriage--;
-                        updateVCarriage();
-                    }
-                    if (v_carriage == 0)
-                    {
-                        updateText();
-                    }
                     carriage--;
+                    updateText();
+                    updateVCarriage();
                 }
             }
             break;
@@ -149,19 +95,11 @@ void TextBox::event(const sf::Event& event)
 
             if (!m_newText.isEmpty())
             {
-                if (carriage != (m_newText.getSize() - 1))
+                if (carriage != (m_newText.getSize()))
                 {
                     carriage++;
-                    if (v_carriage != 25)
-                    {
-                        v_carriage++;
-                        updateVCarriage();
-                    }
-                    else if (v_carriage == 25)
-                    {
-                        updateVCarriage();
-                        updateText();
-                    }
+                    updateText();
+                    updateVCarriage();
                 }
             }
             break;
@@ -170,6 +108,24 @@ void TextBox::event(const sf::Event& event)
         }
     }
 }
+void TextBox::updateText()
+{
+    sf::String temp;
+    if (carriage < 25)
+    {
+        temp = m_newText.substring(0, 25);
+    }
+    else
+    {
+        temp = m_newText.substring(carriage - 25, 25);
+    }
+    setText(temp);
+}
+void TextBox::updateVCarriage()
+{
+    carriage_box.setPosition((m_text.findCharacterPos(carriage)).x + 1, 655);
+}
+
 void TextBox::setOutLine(const int& flag)
 {
     if (flag == 1)
@@ -196,50 +152,7 @@ void TextBox::setText(const sf::String& str)
 {
     m_text.setString(str);
 }
-void TextBox::updateText()
-{
-    sf::String temp;
-    if (carriage > r_bound)
-    {
-        if (m_newText.getSize() > 25)
-        {
-            temp = m_newText.substring(carriage - 24, 25);
-            r_bound = carriage;
-            l_bound = carriage - 24;
-        }
-        else
-        {
-            r_bound = carriage;
-            l_bound = 0;
-        }
-    }
-    else if (carriage < l_bound)
-    {
-        if (m_newText.getSize() > 25)
-        {
-            temp = m_newText.substring(carriage, 25);
-            r_bound = carriage + 24;
-            l_bound = carriage;
-        }
-        else
-        {
-            r_bound = carriage;
-            l_bound = 0;
-        }
-    }
-    else
-    {
-        if (!m_newText.isEmpty())
-        {
-            temp = m_newText.substring(l_bound, 25);
-        }
-    }
-    setText(temp);
-}
-void TextBox::updateVCarriage()
-{
-    carriage_box.setPosition((m_text.findCharacterPos(v_carriage)).x + 1, 655);
-}
+
 
 FocusController::FocusController(FocusObject* obj) : m_object(obj)
 {
