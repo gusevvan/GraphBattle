@@ -44,15 +44,18 @@ namespace gm {
         Oy _oy;
         sf::RectangleShape _backGround;
         mutable sf::CircleShape _grPoint;
-        double _grX, _grY;
+        double _grX = 2, _grY = 300;
         int _targets=0;
         int _radius_reds=0;
+        double _delta = 0;
         bool _isFormula = false;
         float _time;
     public:
         Field() = default;
 
         void generate();
+
+        void setDelta(double newDelta);
 
         bool checkTarget();
 

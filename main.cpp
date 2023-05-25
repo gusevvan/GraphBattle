@@ -171,6 +171,7 @@ int main()
                             formula.refreshError();
                             isFormula = true;
                             field.changeFormulaStatus();
+                            field.setDelta(formula.calculate(0));
                         }
                     }
                     else
@@ -207,6 +208,7 @@ int main()
                             formula.setStr(text);
                             formula.refreshError();
                             field.changeFormulaStatus();
+                            field.setDelta(formula.calculate(0));
                             isFormula = true;
                         }
                     }
@@ -215,7 +217,7 @@ int main()
         }
 
         if (isFormula) {
-            field.setGrY(formula.calculate(field.getGrX()));
+            field.setGrY(formula.calculate(field.getGrX() - 2));
             error.setString(formula.getError());
             logRelease() << formula.getError()<<text;//logger for release version
             //logError() << formula.getError() << text;//logger for checkinkg errors version
@@ -226,6 +228,9 @@ int main()
             field.updateGraph();
         }
 
+        if (field.getTargets() == "0") {
+            hasStarted = false;
+        }
         
         window.display();
     }

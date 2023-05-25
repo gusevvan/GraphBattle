@@ -78,8 +78,6 @@ namespace gm {
 
         _backGround.setSize(sf::Vector2f(800.f, 602.f));
         _backGround.setFillColor(sf::Color::White);
-        _grX = 2;
-        _grY = 300;
 
         int rounds = rand() % 10 + 3;
 
@@ -115,6 +113,10 @@ namespace gm {
         _whites.push_back(shape);
     }
 
+    void Field::setDelta(double newDelta) {
+        _delta = 30 * newDelta;
+    }
+
     bool Field::checkTarget() {
         for (int i = 0; i < _reds.size(); ++i) {
             if ((_reds[i].getPosition().x - _grX) * (_reds[i].getPosition().x - _grX) +
@@ -148,6 +150,7 @@ namespace gm {
     {
         _radius_reds = radius;
     }
+
     void Field::updateGraph() {
         _grX += 0.01 * _time * 10;
     }
@@ -161,7 +164,7 @@ namespace gm {
     }
 
     void Field::setGrY(double newGrY) {
-        _grY = 300 - 30 * newGrY;
+        _grY = _delta + 300 - 30 * newGrY;
     }
 
     bool Field::checkCrash() {
@@ -185,7 +188,7 @@ namespace gm {
             for (sf::CircleShape shape : _whites) {
                 if ((shape.getPosition().x - _grX) * (shape.getPosition().x - _grX) +
                     (shape.getPosition().y - _grY) * (shape.getPosition().y - _grY)
-                    <= (shape.getRadius() - 1) * (shape.getRadius() - 1)) {
+                    <= (shape.getRadius() - 0.1) * (shape.getRadius() - 0.1)) {
                     isCrashed = false;
                     break;
                 }
@@ -224,7 +227,15 @@ namespace gm {
             }
 
             for (sf::CircleShape shape : _reds) {
-                render.draw(shape, states);
+                if (shape.getFillColor() == sf::Color::White) {
+                    render.draw(shape, states);
+                }
+            }
+
+            for (sf::CircleShape shape : _reds) {
+                if (shape.getFillColor() == sf::Color::Red) {
+                    render.draw(shape, states);
+                }
             }
 
             render.draw(_ox, states);

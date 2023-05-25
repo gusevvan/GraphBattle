@@ -407,6 +407,10 @@ namespace gm {
                 throw"Incorrect character in positon ";
             }
 
+            if (std::isinf(result)) {
+                throw"Infinity value ";
+            }
+
             return result;
         }
         catch (const char* error) {
