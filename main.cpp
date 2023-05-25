@@ -7,13 +7,15 @@
 #include <textbox.h>
 #include <field.h>
 #include <button.h>
+#include "logger.h"
 
 int main()
 {
     
     tb::FocusController fc;
     tb::TextBox textBox;
-
+    utils::Log::SetLogFile();
+    
 
     sf::Font font;
     font.loadFromFile("my_font.ttf");
@@ -80,7 +82,7 @@ int main()
 
     bool isFormula = false;
 
-    //field.generate();
+    
     bool hasStarted = false;
 
     int x = 0, y = 0;
@@ -90,18 +92,26 @@ int main()
 
     while (window.isOpen())
     {
+        //variables
         sf::Event event;
+        std::string text;
+        
+        //Check for drawing
         if (!isFormula) {
             window.clear();
         }
+        
+        //time
         float time = clock.getElapsedTime().asMicroseconds();
         clock.restart();
         time /= 800;
-
         
+        //func 
         field.updateTime(time);
         targets.setString(field.getTargets());
+        //logDebug() << field.getGrX() << " " << field.getGrY();//logger for debug version
         
+        //draw
         window.draw(field);
         window.draw(uiPlace);
         window.draw(textBox);
@@ -133,6 +143,8 @@ int main()
                 button.setOutLine((hasStarted) * button.Contains(mousePos.x, mousePos.y));
                 textBox.setOutLine((hasStarted) * textBox.Contains(mousePos.x, mousePos.y));
 
+                
+
                 if (event.type == sf::Event::MouseButtonPressed)
                 {
                     if (hasStarted)
@@ -148,7 +160,7 @@ int main()
                         if (button.Contains(mousePos.x, mousePos.y)) 
                         {
                             auto a = textBox.getStr();
-                            std::string text;
+                            text.clear();
                             for (int i = 0; i < textBox.getSize(); ++i) 
                             {
                                 text += *(a + i);
@@ -185,7 +197,7 @@ int main()
                 if (fc.getFocusObject()) {
                     if (event.type == sf::Event::KeyPressed) {
                         auto a = textBox.getStr();
-                        std::string text;
+                        text.clear();
                         for (int i = 0; i < textBox.getSize(); ++i) {
                             text += *(a + i);
                         }
@@ -205,6 +217,8 @@ int main()
         if (isFormula) {
             field.setGrY(formula.calculate(field.getGrX()));
             error.setString(formula.getError());
+            logRelease() << formula.getError()<<text;//logger for release version
+            //logError() << formula.getError() << text;//logger for checkinkg errors version
             isFormula = !field.checkCrash() && !field.checkTarget() && !formula.getError().size();
             if (!isFormula) {
                 field.changeFormulaStatus();
@@ -213,7 +227,6 @@ int main()
         }
 
         
-
         window.display();
     }
 

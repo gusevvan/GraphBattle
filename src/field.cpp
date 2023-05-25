@@ -156,6 +156,10 @@ namespace gm {
         return _grX;
     }
 
+    double Field::getGrY() {
+        return _grY;
+    }
+
     void Field::setGrY(double newGrY) {
         _grY = 300 - 30 * newGrY;
     }

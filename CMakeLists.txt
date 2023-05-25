@@ -19,11 +19,12 @@ link_directories("ext/SFML/lib/")
 
 add_executable("${PROJECT_NAME}" main.cpp 
 								inc/field.h
-								src/formula.cpp
+								inc/button.h
 								inc/textbox.h
 								inc/formula.h
-								src/field.cpp
-								inc/button.h
+								inc/logger.h
+								src/formula.cpp
+								src/field.cpp			
 								src/textbox.cpp
 								src/button.cpp)
 

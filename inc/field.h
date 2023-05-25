@@ -71,6 +71,7 @@ namespace gm {
         bool checkCrash();
 
         double getGrX();
+        double getGrY();
 
         virtual void draw(sf::RenderTarget& render, sf::RenderStates states) const;
         

@@ -118,7 +118,7 @@ namespace gm {
             {
                 double var;
 
-                throw "Input the value of variable: : ";
+                throw "Unknown variable ";
                 /*std::cin >> var;
 
                 vars.insert(std::pair< const std::string, double >(name, var));
@@ -129,7 +129,6 @@ namespace gm {
         
         catch (const char* error) {
             _error = error;
-            std::cerr << error << std::endl;
             return 0.0;
         }
         return result;
@@ -189,7 +188,6 @@ namespace gm {
         
        catch (const char* error) {
            _error = error;
-           std::cerr << error << std::endl;
        }
     }
 
@@ -237,7 +235,6 @@ namespace gm {
         }
         catch (const char* error) {
             _error = error;
-            std::cerr << error << std::endl;
         }
         try
         {
@@ -280,7 +277,6 @@ namespace gm {
         }
         catch (const char* error) {
             _error = error;
-            std::cerr << error << std::endl;
         }
     }
 
@@ -345,8 +341,6 @@ namespace gm {
             }
             catch (const char* error) {
                 _error = error;
-                std::cerr << error << std::endl;
-
             }
         }
         return result;
@@ -386,8 +380,6 @@ namespace gm {
         }
         catch (const char* error) {
             _error = error;
-            std::cerr << error << std::endl;
-
         }
     }
 
@@ -419,8 +411,6 @@ namespace gm {
         }
         catch (const char* error) {
             _error = error;
-            std::cerr << error << std::endl;
-
         }
     }
     void Formula::refreshError()
