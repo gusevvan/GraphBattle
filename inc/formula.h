@@ -7,7 +7,7 @@ namespace gm {
 	private:
 		std::string _str;
 		std::map< std::string, double > vars;
-		std::string _error = "null";
+		std::string _error = "";
 	public:
 
 		void setStr(std::string& str);
@@ -29,5 +29,7 @@ namespace gm {
 		double calculate(double grX);
 
 		std::string getError();
+		
+		void refreshError();
 	};
 }

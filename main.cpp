@@ -98,7 +98,7 @@ int main()
         clock.restart();
         time /= 800;
 
-        error.setString(formula.getError());
+        
         field.updateTime(time);
         targets.setString(field.getTargets());
         
@@ -106,8 +106,8 @@ int main()
         window.draw(uiPlace);
         window.draw(textBox);
         window.draw(button);
-        window.draw(error);
         window.draw(error_text);
+        window.draw(error);
         for (int i = 1; i < buttons.size(); ++i)
         {
             window.draw(*buttons[i]);
@@ -115,6 +115,7 @@ int main()
         window.draw(invate);
         window.draw(targets);
 
+        
         while (window.pollEvent(event))
         {
 
@@ -144,15 +145,18 @@ int main()
                         {
                             fc.setFocusObject(0);
                         }
-                        if (button.Contains(mousePos.x, mousePos.y)) {
+                        if (button.Contains(mousePos.x, mousePos.y)) 
+                        {
                             auto a = textBox.getStr();
                             std::string text;
-                            for (int i = 0; i < textBox.getSize(); ++i) {
+                            for (int i = 0; i < textBox.getSize(); ++i) 
+                            {
                                 text += *(a + i);
                             }
                             button.setOutLine(0);
                             fc.setFocusObject(0);
                             formula.setStr(text);
+                            formula.refreshError();
                             isFormula = true;
                             field.changeFormulaStatus();
                         }
@@ -189,6 +193,7 @@ int main()
                             fc.setFocusObject(0);
                             button.setOutLine(0);
                             formula.setStr(text);
+                            formula.refreshError();
                             field.changeFormulaStatus();
                             isFormula = true;
                         }
@@ -199,7 +204,8 @@ int main()
 
         if (isFormula) {
             field.setGrY(formula.calculate(field.getGrX()));
-            isFormula = !field.checkCrash() && !field.checkTarget();
+            error.setString(formula.getError());
+            isFormula = !field.checkCrash() && !field.checkTarget() && !formula.getError().size();
             if (!isFormula) {
                 field.changeFormulaStatus();
             }

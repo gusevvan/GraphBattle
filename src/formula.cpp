@@ -423,5 +423,8 @@ namespace gm {
 
         }
     }
-    
+    void Formula::refreshError()
+    {
+        _error = "";
+    }
 }
