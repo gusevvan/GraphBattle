@@ -169,7 +169,7 @@ namespace gm {
     }
 
     void Field::updateGraph() {
-        _grX += 0.01 * _time * 100;
+        _grX += 0.01 * _time * 10;
     }
 
     double Field::getGrX() {

@@ -100,11 +100,10 @@ int main()
 
     int attempts = 0;
     float player_time = 0;
-    bool has_played = true;
     
     sf::Text text_attempts;
     text_attempts.setFont(font);
-    text_attempts.setString(static_cast<char>(attempts));
+    text_attempts.setString("0");
     text_attempts.setPosition(700, 700);
     
     sf::Text text_player_time;
@@ -132,8 +131,7 @@ int main()
             player_time = player_clock.getElapsedTime().asMilliseconds();
             player_time /= 1000;
         }
-        std::cout << has_played;
-        if (!isFormula && !has_played) {
+        if (!isFormula) {
             window.clear();
         }
         
@@ -188,12 +186,10 @@ int main()
         //in game msg
         if (!hasStarted)
         {
-            if (!has_played)
+            
+            if (field.getTargets() == "1")
             {
-                if (field.getTargets() == "1")
-                {
-                    window.draw(hellomsg);
-                }
+                window.draw(hellomsg);
             }
         }
 
@@ -253,13 +249,14 @@ int main()
                             if (buttons[i]->Contains(mousePos.x, mousePos.y))
                             {
 
-                                field.setTargets(i);
+                                field.setTargets(2*i +1);
                                 field.setRadiusReds(40 - (i*10));
                                 field.setRounds(i);
                                 hasStarted = true;
+                                attempts = 0;
+                                player_time = 0;
                                 field.generate();
                                 player_clock.restart();
-                                has_played = false;
                             }
                         }
                     }
@@ -303,28 +300,24 @@ int main()
             }
             field.updateGraph();
         }
-
-        if (field.getTargets() == "0") 
-        {
-            
-            hasStarted = false;
-            if(!has_played)
-            {
-            msg = "Game over! \n";
-            std::cout << std::to_string(player_time) << std::endl;
-            msg += "Your time: " + std::to_string(player_time);
-            msg += " \n";
-            msg += "Your attempts: " + std::to_string(attempts);
-            std::cout << msg;
-            msg::Msg endgameMsg(msg);
-            window.draw(endgameMsg);
-            attempts = 0;
-            player_time = 0;
-            }
-            has_played = true;
-        }
         
-        window.display();
+            if (field.getTargets() == "0")
+            {
+
+                hasStarted = false;
+
+                msg = "Game over! \n";
+                std::cout << std::to_string(player_time) << std::endl;
+                msg += "Your time: " + std::to_string(player_time);
+                msg += " \n";
+                msg += "Your attempts: " + std::to_string(attempts);
+                std::cout << msg;
+                msg::Msg endgameMsg(msg);
+                window.draw(endgameMsg);
+            }
+
+            window.display();
+        
     }
 
     return 0;
