@@ -254,7 +254,7 @@ int main()
                                 field.setRounds(i);
                                 hasStarted = true;
                                 attempts = 0;
-                                player_time = 0;
+                                player_сlock.restart();
                                 field.generate();
                                 player_clock.restart();
                             }
