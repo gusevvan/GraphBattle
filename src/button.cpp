@@ -1,6 +1,6 @@
 #include "button.h"
 
-using namespace bt;
+using namespace ui;
 Button::Button(char* newText)
 {
     font.loadFromFile("my_font.ttf");

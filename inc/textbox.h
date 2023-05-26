@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 
-namespace tb
+namespace ui
 {
     class FocusObject
     {

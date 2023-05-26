@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-namespace bt
+namespace ui
 {
     class Button : public sf::Drawable
     {

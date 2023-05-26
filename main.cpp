@@ -13,8 +13,8 @@
 int main()
 {
     
-    tb::FocusController fc;
-    tb::TextBox textBox;
+    ui::FocusController fc;
+    ui::TextBox textBox;
     utils::Log::SetLogFile();
     
 
@@ -43,24 +43,24 @@ int main()
     uiPlace.setPosition(0.f, 602.f);
     uiPlace.setFillColor(sf::Color(124, 124, 124));
 
-    std::vector<bt::Button*> buttons;
+    std::vector<ui::Button*> buttons;
 
-    bt::Button button("Fire");
+    ui::Button button("Fire");
     button.setPosition(350, 700);
     button.setTextColor(255, 102, 0);
     buttons.push_back(&button);
 
-    bt::Button buttonEasy("Easy");
+    ui::Button buttonEasy("Easy");
     buttonEasy.setPosition(10, 650);
     buttonEasy.setTextColor(0, 128, 0);
     buttons.push_back(&buttonEasy);
 
-    bt::Button buttonNormal("Normal");
+    ui::Button buttonNormal("Normal");
     buttonNormal.setPosition(10, 700);
     buttonNormal.setTextColor(255, 255, 0);
     buttons.push_back(&buttonNormal);
 
-    bt::Button buttonHard("Hard");
+    ui::Button buttonHard("Hard");
     buttonHard.setPosition(10, 750);
     buttonHard.setTextColor(220, 20, 60);
     buttons.push_back(&buttonHard);
@@ -262,7 +262,7 @@ int main()
                     }
                     
                 }
-                tb::FocusObject* fo = fc.getFocusObject();
+                ui::FocusObject* fo = fc.getFocusObject();
                 if (fo != 0)
                 {
                     fo->event(event);

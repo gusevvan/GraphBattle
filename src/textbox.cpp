@@ -1,5 +1,5 @@
 #include "textbox.h"
-using namespace tb;
+using namespace ui;
 TextBox::TextBox()
 {
     m_newText = "";
